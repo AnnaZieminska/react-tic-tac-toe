@@ -2,30 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-    render() {
-        const winner = this.props.winner
-            ? this.props.winner.find(
-                  winner =>
-                      winner.x === this.props.square.x &&
-                      winner.y === this.props.square.y
-              )
-            : null;
+function Square(props) {
+    const winner = props.winner
+        ? props.winner.find(
+              winner =>
+                  winner.x === props.square.x && winner.y === props.square.y
+          )
+        : null;
 
-        return (
-            <button
-                className={`square ${winner ? 'winner' : ''}`}
-                onClick={this.props.onClick}
-            >
-                {this.props.square.sign}
-            </button>
-        );
-    }
+    return (
+        <button
+            className={`square ${winner ? 'winner' : ''}`}
+            onClick={props.onClick}
+        >
+            {props.square.sign}
+        </button>
+    );
 }
 
 class Board extends React.Component {
     renderSquare(i, x, y) {
-        console.log(i);
         return (
             <Square
                 key={i}
@@ -90,12 +86,11 @@ class Game extends React.Component {
         const index = event.i;
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
-        let squares = current.squares;
-        if (calculateWinner(squares) || squares[index].sign) {
+        if (calculateWinner(current.squares) || current.squares[index].sign) {
             return;
         }
 
-        squares = squares.map((square, i) => {
+        const squares = current.squares.map((square, i) => {
             if (i === index) {
                 return {
                     sign: this.state.xIsNext ? 'X' : 'O',
